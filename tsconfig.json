@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "strict": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "types": ["node", "enonic-types"],
+    "rootDirs": [
+      "./src/main/resources",
+      "./.xp-codegen"
+    ],
+    "paths": {
+      "/lib/*": ["./src/main/resources/lib/*"],
+      "/site/*": ["./.xp-codegen/site/*"]
+    }
+  },
+  "include": [
+    "./.xp-codegen/**/*",
+    "./src/main/resources/**/*"
+  ],
+  "exclude": ["./build/*"]
+}

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content-type>
+  <display-name i18n="article.displayName">Article</display-name>
+  <description i18n="article.description">Article that can be used as part of the blog</description>
+  <super-type>base:structured</super-type>
+
+  <form>
+    <input name="unsplashId" type="CustomSelector">
+      <label>Image</label>
+      <occurrences minimum="0" maximum="3"/>
+      <config>
+        <service>unsplash</service>
+      </config>
+    </input>
+  </form>
+</content-type>
