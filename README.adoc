@@ -1,40 +1,26 @@
-= Webpack Starter for Enonic XP
+= CustomSelector with Unsplash images for XP
 
-This starter kit will set up a basic template for your new Enonic app, with support for the Webpack.
+This application provides a https://developer.enonic.com/docs/xp/stable/cms/input-types#customselector[CustomSelector] for searching images on https://unsplash.com/[Unsplash] directly in XP. The application integrates with the https://unsplash.com/documentation[Unsplash API]. You will need an Access Key from Unsplash to make the integration work.
 
-NOTE: See the official https://developer.enonic.com/start/starter-webpack[documentation] for a more detailed guide.
+image::src/main/resources/application.svg/[Static,200]
 
-== Introduction
+== Development
 
-Once initiated, you'll have the bare minimum needed to create a new Enonic
-application with Webpack. You'll have all the folders set up, and can get
-straight to creating what you're creating.
+Make sure to have the https://developer.enonic.com/start[Enonic CLI] installed.
 
-The project will support:
+=== Building
 
-* Code minification;
-* Production and development environments;
-* SASS and Less support;
-* Transpilation of ECMAScript code with Babel (client- and server-side);
-* Transpilation of TypeScript code (client- and server-side).
+To build the project run the following code:
 
-== Create a project
+[source,bash]
+----
+enonic project build
+----
 
-To setup a project locally, simply run the following command:
+=== Deploy locally
 
-```bash
-$ enonic project create
-```
-Complete the Wizard and make sure you choose *Webpack starter* from the list of starters
-
-```bash
-$ cd <project-folder>
-```
-
-To build and deploy the project:
-
-```bash
-$ enonic project deploy
-```
-
-NOTE: *Don't have the Enonic CLI?* Visit the https://developer.enonic.com/start[Getting started guide] to install it.
+Deploy locally for testing purposes:
+[source,bash]
+----
+enonic project deploy
+----
