@@ -55,8 +55,8 @@ export function searchPhotos({
 }
 
 export function getPhotoById(id: string) {
- const accessKey = getSiteConfig().unsplashAccessKey;
- const url = `https://api.unsplash.com/photos/${id}`;
+  const accessKey = getSiteConfig().unsplashAccessKey;
+  const url = `https://api.unsplash.com/photos/${id}`;
   const response = request({
     url,
     headers: {
