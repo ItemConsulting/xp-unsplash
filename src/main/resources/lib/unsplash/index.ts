@@ -46,11 +46,10 @@ export function searchPhotos({
     },
   });
 
-  if (response.status < 400) {
-    return JSON.parse(response.body || "");
+  if (response.status < 400 && response.body) {
+    return JSON.parse(response.body);
   } else {
-    const errors = JSON.parse(response.body ?? "")?.errors.join();
-    throw new Error(errors);
+    throwErrorFromBodyString(response.body)
   }
 }
 
@@ -64,10 +63,14 @@ export function getPhotoById(id: string) {
     },
   });
 
-  if (response.status < 400) {
-    return JSON.parse(response.body || "");
+  if (response.status < 400 && response.body) {
+    return JSON.parse(response.body);
   } else {
-    const errors = JSON.parse(response.body ?? "")?.errors.join();
-    throw new Error(errors);
+    throwErrorFromBodyString(response.body)
   }
+}
+
+function throwErrorFromBodyString(body: string | null): never {
+  const errors = JSON.parse(body ?? "{}")?.errors.join() ?? "An error occurred.";
+  throw new Error(errors);
 }
