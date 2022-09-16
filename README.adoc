@@ -2,6 +2,8 @@
 
 This application provides a https://developer.enonic.com/docs/xp/stable/cms/input-types#customselector[CustomSelector] for searching images on https://unsplash.com/[Unsplash] directly in XP. The application integrates with the https://unsplash.com/documentation[Unsplash API]. You will need an Access Key from Unsplash to make the integration work.
 
+image::https://jitpack.io/v/no.item/xp-unsplash.svg/[]
+
 image::src/main/resources/application.svg/[Static,200]
 
 == Development
