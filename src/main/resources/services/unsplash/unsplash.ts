@@ -1,9 +1,7 @@
 import { serviceUrl } from "/lib/xp/portal";
-import {
-  getPhotoById,
-  searchPhotos,
-  UnsplashSearchResults,
-} from "/lib/unsplash";
+import { UnsplashImageMetadata } from "/lib/unsplash/types";
+import { searchPhotos } from "/lib/unsplash/client";
+import { getUnsplashImagesMetadata } from "/lib/unsplash";
 
 export function get(
   req: XP.CustomSelectorServiceRequest
@@ -13,12 +11,12 @@ export function get(
 
   if (req.params.ids) {
     const photoIds = req.params.ids.split(",");
-    const photos = photoIds.map(getPhotoById);
+    const imagesMetadata = getUnsplashImagesMetadata(photoIds);
     return {
       body: {
         count,
-        total: photos.length,
-        hits: photos.map(unsplashResultToCustomSelectorHit),
+        total: imagesMetadata.length,
+        hits: imagesMetadata.map(unsplashImageMetadataToCustomSelectorHit),
       },
     };
   }
@@ -33,21 +31,24 @@ export function get(
     body: {
       count,
       total: unsplashResponse.total,
-      hits: unsplashResponse.results.map(unsplashResultToCustomSelectorHit),
+      hits: unsplashResponse.results.map(
+        unsplashImageMetadataToCustomSelectorHit
+      ),
     },
   };
 }
 
-function unsplashResultToCustomSelectorHit(
-  result: UnsplashSearchResults
+function unsplashImageMetadataToCustomSelectorHit(
+  imageMetadata: UnsplashImageMetadata
 ): XP.CustomSelectorServiceResponseHit {
   return {
-    id: result.id,
-    displayName: result.alt_description ?? result.description ?? "[NO_NAME]",
+    id: imageMetadata.id,
+    displayName:
+      imageMetadata.alt_description ?? imageMetadata.description ?? "[NO_NAME]",
     iconUrl: serviceUrl({
       service: "unsplash-image",
-      params: { imageUrl: result.urls.thumb },
+      params: { imageUrl: imageMetadata.urls.thumb },
     }),
-    description: result.user.name,
+    description: imageMetadata.user.name,
   };
 }

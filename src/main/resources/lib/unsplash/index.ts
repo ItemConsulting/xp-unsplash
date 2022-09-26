@@ -1,76 +1,57 @@
-import { getSiteConfig } from "/lib/xp/portal";
-import { request } from "/lib/http-client";
+import {
+  UnsplashImageMetadata,
+  UnsplashImageUrlParams,
+} from "/lib/unsplash/types";
+import { lookUpImageMetadata, storeImageMetadata } from "/lib/unsplash/repo";
+import { getPhotoById } from "/lib/unsplash/client";
+import { serviceUrl } from "/lib/xp/portal";
+import { notEmpty } from "/lib/unsplash/utils";
+export { searchPhotos } from "/lib/unsplash/client";
 
-interface SearchPhotosParams {
-  query: string;
-  start: number;
-  count: number;
+export function getUnsplashImagesMetadata(
+  unsplashIds: string[]
+): UnsplashImageMetadata[] {
+  return unsplashIds.map(getUnsplashImageMetadata).filter(notEmpty);
 }
 
-export interface UnsplashSearchResults {
-  id: string;
-  description: string;
-  alt_description: string;
-  user: {
-    name: string;
-  };
-  urls: {
-    thumb: string;
-  };
-}
-
-interface UnsplashResponseBody {
-  total: number;
-  total_pages: number;
-  results: UnsplashSearchResults[];
-}
-
-export function searchPhotos({
-  query,
-  count,
-  start,
-}: SearchPhotosParams): UnsplashResponseBody {
-  const unsplashPageNumber = Math.floor(start / count);
-
-  const accessKey = getSiteConfig().unsplashAccessKey;
-  const url = "https://api.unsplash.com/search/photos";
-  const response = request({
-    url,
-    headers: {
-      Authorization: `Client-ID ${accessKey}`,
-    },
-    params: {
-      query,
-      page: unsplashPageNumber.toString(),
-      per_page: count.toString(),
-    },
+export function getUnsplashImageUrl(
+  unsplashId: string,
+  width: number,
+  height: number
+) {
+  const rawImageUrl = getUnsplashImageMetadata(unsplashId)?.urls.raw ?? "";
+  const adjustedImageUrl = rawImageUrl
+    ? createImageUrl(rawImageUrl, {
+        width,
+        height,
+      })
+    : "";
+  return serviceUrl({
+    service: "unsplash-image",
+    params: { adjustedImageUrl },
   });
+}
 
-  if (response.status < 400 && response.body) {
-    return JSON.parse(response.body);
-  } else {
-    throwErrorFromBodyString(response.body)
+function getUnsplashImageMetadata(
+  unsplashId: string
+): UnsplashImageMetadata | null {
+  const storedUnsplashImageMetadata = lookUpImageMetadata(unsplashId)[0];
+  if (storedUnsplashImageMetadata) {
+    return storedUnsplashImageMetadata;
+  }
+  try {
+    const unsplashImageMetadata = getPhotoById(unsplashId);
+    storeImageMetadata(unsplashImageMetadata);
+    return unsplashImageMetadata;
+  } catch (e) {
+    log.error(`Could not fetch image with id ${unsplashId}`, e);
+    return null;
   }
 }
 
-export function getPhotoById(id: string) {
-  const accessKey = getSiteConfig().unsplashAccessKey;
-  const url = `https://api.unsplash.com/photos/${id}`;
-  const response = request({
-    url,
-    headers: {
-      Authorization: `Client-ID ${accessKey}`,
-    },
-  });
-
-  if (response.status < 400 && response.body) {
-    return JSON.parse(response.body);
-  } else {
-    throwErrorFromBodyString(response.body)
-  }
-}
-
-function throwErrorFromBodyString(body: string | null): never {
-  const errors = JSON.parse(body ?? "{}")?.errors.join() ?? "An error occurred.";
-  throw new Error(errors);
+function createImageUrl(raw: string, params: UnsplashImageUrlParams): string {
+  const { width, height } = params;
+  return `${raw}&fm=jpg${width ? `&w=${width}` : ""}${
+    height ? `&h=${height}` : ""
+  }`;
 }
