@@ -1,26 +1,14 @@
 plugins {
     id 'java'
     id 'maven-publish'
-    id "com.github.node-gradle.node" version '3.3.0'
-    id 'com.enonic.xp.app' version '3.1.0'
-    id 'no.item.xp.codegen' version '2.0.1'
-}
-
-app {
-    name = "${appName}"
-    displayName = "${appDisplayName}"
-    vendorName = "${vendorName}"
-    vendorUrl = "${vendorUrl}"
-    systemVersion = "${xpVersion}"
+    id "com.github.node-gradle.node" version '3.4.0'
+    id 'com.enonic.xp.base' version '3.1.0'
 }
 
 dependencies {
-    include "com.enonic.xp:lib-event:${xpVersion}"
-    include "com.enonic.xp:lib-content:${xpVersion}"
-    include "com.enonic.xp:lib-portal:${xpVersion}"
-    include "com.enonic.lib:lib-mustache:2.0.0"
-    include "com.enonic.lib:lib-static:1.0.2"
-    include 'com.enonic.lib:lib-http-client:3.1.0'
+    compileOnly "com.enonic.xp:lib-node:${xpVersion}"
+    compileOnly "com.enonic.xp:lib-repo:${xpVersion}"
+    compileOnly "com.enonic.lib:lib-http-client:3.1.0"
 }
 
 repositories {
@@ -83,7 +71,6 @@ jar {
     exclude 'assets/styles/**/*.scss'
     exclude 'assets/styles/**/*.js'
 
-    dependsOn += generateTypeScript
     dependsOn += serverWebpack
 }
 
