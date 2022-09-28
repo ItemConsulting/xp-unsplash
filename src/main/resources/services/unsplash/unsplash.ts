@@ -1,7 +1,6 @@
 import { serviceUrl } from "/lib/xp/portal";
-import { UnsplashImageMetadata } from "/lib/unsplash/types";
-import { searchPhotos } from "/lib/unsplash/client";
-import { getUnsplashImagesMetadata } from "/lib/unsplash";
+import type { UnsplashImageMetadata } from "/lib/unsplash/types";
+import { getUnsplashImagesMetadata, searchPhotos } from "/lib/unsplash";
 
 export function get(
   req: XP.CustomSelectorServiceRequest

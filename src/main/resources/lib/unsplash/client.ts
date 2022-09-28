@@ -1,5 +1,9 @@
 import { request } from "/lib/http-client";
-import { SearchPhotosParams, UnsplashResponseBody } from "/lib/unsplash/types";
+import type {
+  SearchPhotosParams,
+  UnsplashImageMetadata,
+  UnsplashResponseBody,
+} from "/lib/unsplash/types";
 
 export function searchPhotos({
   query,
@@ -29,7 +33,7 @@ export function searchPhotos({
   }
 }
 
-export function getPhotoById(id: string) {
+export function getPhotoById(id: string): UnsplashImageMetadata | never {
   const accessKey = app.config.unsplashAccessKey;
   const url = `https://api.unsplash.com/photos/${id}`;
   const response = request({

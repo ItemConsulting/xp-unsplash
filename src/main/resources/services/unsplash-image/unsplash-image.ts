@@ -6,7 +6,7 @@ export function get(req: XP.Request): XP.Response {
   if (!imageUrl) return { status: 404 };
 
   const httpResponse = request({
-    url: req.params.imageUrl ?? "",
+    url: imageUrl ?? "",
   });
 
   if (httpResponse.status >= 400) {

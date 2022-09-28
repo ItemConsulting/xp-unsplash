@@ -1,4 +1,4 @@
-import {
+import type {
   UnsplashImageMetadata,
   UnsplashImageUrlParams,
 } from "/lib/unsplash/types";
@@ -19,13 +19,13 @@ export function getUnsplashImageUrl(
   width: number,
   height: number
 ) {
-  const rawImageUrl = getUnsplashImageMetadata(unsplashId)?.urls.raw ?? "";
+  const rawImageUrl = getUnsplashImageMetadata(unsplashId)?.urls.raw;
   const adjustedImageUrl = rawImageUrl
     ? createImageUrl(rawImageUrl, {
         width,
         height,
       })
-    : "";
+    : undefined;
   return serviceUrl({
     service: "unsplash-image",
     params: { adjustedImageUrl },
