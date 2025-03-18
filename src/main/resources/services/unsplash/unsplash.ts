@@ -8,7 +8,7 @@ import {
 export function get(
   req: XP.CustomSelectorServiceRequest
 ): XP.CustomSelectorServiceResponse {
-  const start = parseInt(req.params.start ?? "0") + 1;
+  const start = parseInt(req.params.start ?? "0");
   const count = parseInt(req.params.count ?? "10");
 
   if (req.params.ids) {
@@ -21,12 +21,20 @@ export function get(
         hits: photos.map(unsplashResultToCustomSelectorHit),
       },
     };
+  } else if (!req.params.query) {
+    return {
+      body: {
+        count: 0,
+        total: 0,
+        hits: [],
+      },
+    };
   }
 
   const unsplashResponse = searchPhotos({
     count,
     start,
-    query: req.params.query ?? "",
+    query: req.params.query,
   });
 
   return {

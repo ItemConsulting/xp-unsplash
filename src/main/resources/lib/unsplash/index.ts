@@ -30,7 +30,7 @@ export function searchPhotos({
   count,
   start,
 }: SearchPhotosParams): UnsplashResponseBody {
-  const unsplashPageNumber = Math.floor(start / count);
+  const unsplashPageNumber = Math.floor(start / count) + 1;
 
   const accessKey = getSiteConfig().unsplashAccessKey;
   const url = "https://api.unsplash.com/search/photos";
